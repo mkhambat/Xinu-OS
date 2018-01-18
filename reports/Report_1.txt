@@ -1,0 +1,7 @@
+
+1. Orphan Process: An orphan process is a process that does not have a parent. That is, a Process whose parent process has been terminated but the process is running itself.
+
+   Zombie Process: A process which has been terminated but still has an entry in the process table is called as a Zombie Process. In simple words, a process is called a zombie process if it has been terminated but it still exisits in the memory.
+
+
+2. The exec call invokes a new program. It loads the program into the current process space and runs it from the start. It can be used in one program to call another program. As the calling process is functionally replaced by the new process there is no return from a successful call to a exec() function.

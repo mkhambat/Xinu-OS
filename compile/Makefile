@@ -9,7 +9,7 @@
 #####################################################################
 include Makedefs
 
-NODE=0
+NODE=02
 GPORT=556${NODE}
 
 ifndef PLATFORM
