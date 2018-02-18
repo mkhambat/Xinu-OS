@@ -12,25 +12,42 @@ status	insert(
 	  int32		key		/* Key for the inserted process	*/
 	)
 {
-	int16	curr;			/* Runs through items in a queue*/
-	int16	prev;			/* Holds previous node index	*/
+	struct qentry *current, *new_node;			/* Runs through items in a queue*/
 
 	if (isbadqid(q) || isbadpid(pid)) {
 		return SYSERR;
 	}
 
-	curr = firstid(q);
-	while (queuetab[curr].qkey >= key) {
-		curr = queuetab[curr].qnext;
+	// current = &queuetab[firstid(q)];
+	// while (current != NULL && current->qkey >= key) {
+	// 	current = queuetab[current->pid].qnext;
+	// }
+
+	// /* Insert process between curr node and previous node */
+
+	// prev = queuetab[current->pid].qprev;	/* Get index of previous node	*/
+	// queuetab[pid].qnext = current;
+	// queuetab[pid].qprev = prev;
+	// queuetab[pid].qkey = key;
+ //    queuetab[pid].pid = pid;
+	// queuetab[prev->pid].qnext = &queuetab[pid];
+	// queuetab[current->pid].qprev = &queuetab[pid];
+
+	current = &queuetab[queuehead(q)];
+	while (current!=NULL && current->qkey>=key)
+	{
+		current = current->qnext;
 	}
 
-	/* Insert process between curr node and previous node */
+	// new_node = &queuetab[pid];
+	new_node = (struct qentry*)getmem(sizeof(struct qentry));
+	new_node->qkey = key;
+	new_node->pid = pid;
+	
+	new_node->qnext = current;
+	new_node->qprev = current->qprev;
+	(current->qprev)->qnext = new_node;
+	current->qprev = new_node;
 
-	prev = queuetab[curr].qprev;	/* Get index of previous node	*/
-	queuetab[pid].qnext = curr;
-	queuetab[pid].qprev = prev;
-	queuetab[pid].qkey = key;
-	queuetab[prev].qnext = pid;
-	queuetab[curr].qprev = pid;
 	return OK;
 }

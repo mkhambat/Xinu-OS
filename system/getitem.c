@@ -11,14 +11,22 @@ pid32	getfirst(
 	)				/* Remove a process (assumed	*/
 					/*   valid with no check)	*/
 {
-	pid32	head;
-
-	if (isempty(q)) {
+	// pid32	head;
+	// pid32 first_pid;
+	struct qentry *first,*head;
+	// first_pid = getitem(queuetab[head].qnext->pid)
+	if (isempty(q) ) {
 		return EMPTY;
 	}
 
-	head = queuehead(q);
-	return getitem(queuetab[head].qnext);
+	if(isbadqid(q))
+	{
+		return SYSERR;
+	}
+
+	head = &queuetab[queuehead(q)];
+	first = head->qnext;
+	return getitem(first->pid);
 }
 
 /*------------------------------------------------------------------------
@@ -30,14 +38,20 @@ pid32	getlast(
 	)				/* Remove a process (assumed	*/
 					/*   valid with no check)	*/
 {
-	pid32 tail;
-
+	// pid32 tail;
+	struct qentry *last, *tail; 
+	
 	if (isempty(q)) {
-		return EMPTY;
+		return NULL;
 	}
 
-	tail = queuetail(q);
-	return getitem(queuetab[tail].qprev);
+	if(isbadqid(q)){
+		return SYSERR;
+	}
+
+	tail = &queuetab[queuetail(q)];
+	last = tail->qprev;
+	return getitem(last->pid);
 }
 
 /*------------------------------------------------------------------------
@@ -48,11 +62,42 @@ pid32	getitem(
 	  pid32		pid		/* ID of process to remove	*/
 	)
 {
-	pid32	prev, next;
+	// pid32	prev, next;
 
-	next = queuetab[pid].qnext;	/* Following node in list	*/
-	prev = queuetab[pid].qprev;	/* Previous node in list	*/
-	queuetab[prev].qnext = next;
-	queuetab[next].qprev = prev;
+	if (isbadpid(pid))
+	{
+		return NULL;
+	}
+	struct qentry *prev, *next, *current;	
+
+	if(proctab[pid].prstate==PR_READY)
+	{
+		current = &queuetab[readylist];
+		while(current!=NULL && current->pid!=pid)
+		{
+			current=current->qnext;
+		}
+	}
+
+	if(proctab[pid].prstate==PR_SLEEP)
+	{
+		current = &queuetab[sleepq];
+		while(current!=NULL && current->pid!=pid)
+		{
+			current=current->qnext;
+		}
+	}
+
+
+	// current = &queuetab[pid];
+	next = current->qnext;	
+	prev = current->qprev;	
+	// queuetab[prev->pid].qnext = next;
+	// queuetab[next->pid].qprev = prev;
+	prev->qnext = next;
+	next->qprev = prev;
+
+	freemem(current,sizeof(struct qentry));
+
 	return pid;
 }
