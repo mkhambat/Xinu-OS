@@ -17,6 +17,11 @@ pid32	getfirst(
 		return EMPTY;
 	}
 
+	if(isbadqid(q))		//Checks if qid is valid or not
+	{
+		return SYSERR;
+	}
+
 	head = queuehead(q);
 	return getitem(queuetab[head].qnext);
 }
@@ -34,6 +39,11 @@ pid32	getlast(
 
 	if (isempty(q)) {
 		return EMPTY;
+	}
+
+	if(isbadqid(q))		//Checks if the qid is valid or not
+	{
+		return SYSERR;
 	}
 
 	tail = queuetail(q);
