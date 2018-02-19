@@ -12,22 +12,17 @@ status	insertd(			/* Assumes interrupts disabled	*/
 	  int32		key		/* Delay from "now" (in ms.)	*/
 	)
 {
-	// int32	next;			 Runs through the delta list	
-	// int32	prev;			/* Follows next through the list*/
-
+	
 	struct qentry *new_node, *prev, *next;
 
 	if (isbadqid(q) || isbadpid(pid)) {
 		return SYSERR;
 	}
 
-	prev = &queuetab[queuehead(q)];
-	next = queuetab[queuehead(q)].qnext;
-	while ((next->pid != queuetail(q)) && (next->qkey <= key)) {
-		// key -= queuetab[next].qkey;
-		// prev = next;
-		// next = queuetab[next].qnext;
-
+	prev = &queuetab[queuehead(q)]; 	// Assigns head to prev
+	next = queuetab[queuehead(q)].qnext;	// Assigns next to the first node after head node
+	while ((next->pid != queuetail(q)) && (next->qkey <= key)) { 	// Look for the node in the list
+		
 		key -= next->qkey;
 		prev = next;
 		next = next->qnext;
@@ -36,13 +31,8 @@ status	insertd(			/* Assumes interrupts disabled	*/
 
 	/* Insert new node between prev and next nodes */
 
-	// queuetab[pid].qnext = next;
-	// queuetab[pid].qprev = prev;
-	// queuetab[pid].qkey = key;
-	// queuetab[prev].qnext = pid;
-	// queuetab[next].qprev = pid;
-
-	new_node = (struct qentry*)getmem(sizeof(struct qentry));
+	
+	new_node = (struct qentry*)getmem(sizeof(struct qentry)); 	// Allocate memory for new node
 	new_node->qkey = key;
 	new_node->pid = pid;
 
@@ -52,7 +42,7 @@ status	insertd(			/* Assumes interrupts disabled	*/
 	next->qprev = new_node;
 
 	if (next->pid != queuetail(q)) {
-		// queuetab[next].qkey -= key;
+	
 		next->qkey -= key;
 	}
 

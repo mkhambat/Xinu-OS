@@ -19,24 +19,11 @@ pid32	enqueue(
 		return SYSERR;
 	}
 
-	// tail = queuetail(q);
-	// prev = queuetab[tail->pid].qprev->pid;
 
-	// queuetab[pid].qnext  = tail;	/* Insert just before tail node	*/
-	// queuetab[pid].qprev  = prev;
-	// queuetab[prev->pid].qnext = pid;
-	// queuetab[tail->pid].qprev = pid;
+	current = (struct qentry*)getmem(sizeof(struct qentry));	//Allocate memory for a node
+	current->pid = pid;		
 
-	// current = &queuetab[pid];
-	// current = &queuetab[queuehead(q)];
-	// while(pid!=NULL && q->pid!=pid)
-	// {
-	// 	current = current->qnext;
-	// }
-
-	current = (struct qentry*)getmem(sizeof(struct qentry));
-	current->pid = pid;
-
+	// Add a node just before the tail
 	tail = &queuetab[queuetail(q)];
 	prev = tail->qprev;
 
@@ -66,24 +53,8 @@ pid32	dequeue(
 		return NULL;
 	}
 
-	// head = &queuetab[queuehead(q)];
-	// next = &queuetab[head->pid].qnext;
-
-	// head.qnext = next;
-	// head = next->prev;
-
 	
-
-
-	pid = getfirst(q);
-	// current = &queuetab[pid];
-	// // first=&queuetab[pid];
-	// current->qprev = NULL;
-	// current->qnext = NULL;
-
-	// head->qnext = first->qnext;
-	// next->qprev = first->qprev;
-
-	// queuetab[head->pid].qnext->pid = queuetab[head].qnext
+	pid = getfirst(q);		//Extract the pid of the 1st node after the head node
+	
 	return pid;
 }

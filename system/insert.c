@@ -18,32 +18,18 @@ status	insert(
 		return SYSERR;
 	}
 
-	// current = &queuetab[firstid(q)];
-	// while (current != NULL && current->qkey >= key) {
-	// 	current = queuetab[current->pid].qnext;
-	// }
-
-	// /* Insert process between curr node and previous node */
-
-	// prev = queuetab[current->pid].qprev;	/* Get index of previous node	*/
-	// queuetab[pid].qnext = current;
-	// queuetab[pid].qprev = prev;
-	// queuetab[pid].qkey = key;
- //    queuetab[pid].pid = pid;
-	// queuetab[prev->pid].qnext = &queuetab[pid];
-	// queuetab[current->pid].qprev = &queuetab[pid];
-
-	current = &queuetab[queuehead(q)];
-	while (current!=NULL && current->qkey>=key)
+	
+	current = &queuetab[queuehead(q)];		//Assign the head node of the list to current
+	while (current!=NULL && current->qkey>=key)		//Look for a node which has priority less than key
 	{
 		current = current->qnext;
 	}
 
 	// new_node = &queuetab[pid];
-	new_node = (struct qentry*)getmem(sizeof(struct qentry));
-	new_node->qkey = key;
+	new_node = (struct qentry*)getmem(sizeof(struct qentry)); 	//Allocate memory for a new node
+	new_node->qkey = key; 	
 	new_node->pid = pid;
-	
+	// Insert node between current node and prev node
 	new_node->qnext = current;
 	new_node->qprev = current->qprev;
 	(current->qprev)->qnext = new_node;

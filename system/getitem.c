@@ -11,10 +11,9 @@ pid32	getfirst(
 	)				/* Remove a process (assumed	*/
 					/*   valid with no check)	*/
 {
-	// pid32	head;
-	// pid32 first_pid;
+	
 	struct qentry *first,*head;
-	// first_pid = getitem(queuetab[head].qnext->pid)
+	
 	if (isempty(q) ) {
 		return EMPTY;
 	}
@@ -24,6 +23,7 @@ pid32	getfirst(
 		return SYSERR;
 	}
 
+	// Get the pid of the first node after head node
 	head = &queuetab[queuehead(q)];
 	first = head->qnext;
 	return getitem(first->pid);
@@ -38,7 +38,7 @@ pid32	getlast(
 	)				/* Remove a process (assumed	*/
 					/*   valid with no check)	*/
 {
-	// pid32 tail;
+	
 	struct qentry *last, *tail; 
 	
 	if (isempty(q)) {
@@ -49,6 +49,7 @@ pid32	getlast(
 		return SYSERR;
 	}
 
+	// Get the pid of the first node before tail node
 	tail = &queuetab[queuetail(q)];
 	last = tail->qprev;
 	return getitem(last->pid);
@@ -62,7 +63,7 @@ pid32	getitem(
 	  pid32		pid		/* ID of process to remove	*/
 	)
 {
-	// pid32	prev, next;
+	
 
 	if (isbadpid(pid))
 	{
@@ -70,33 +71,32 @@ pid32	getitem(
 	}
 	struct qentry *prev, *next, *current;	
 
-	if(proctab[pid].prstate==PR_READY)
+	if(proctab[pid].prstate==PR_READY)		// Check if process is in ready queue
 	{
 		current = &queuetab[readylist];
-		while(current!=NULL && current->pid!=pid)
+		while(current!=NULL && current->pid!=pid) 	// If found search for it
 		{
 			current=current->qnext;
 		}
 	}
 
-	if(proctab[pid].prstate==PR_SLEEP)
+	if(proctab[pid].prstate==PR_SLEEP) 		// Check if process is in sleep queue
 	{
 		current = &queuetab[sleepq];
-		while(current!=NULL && current->pid!=pid)
+		while(current!=NULL && current->pid!=pid)	// if found, search for it
 		{
 			current=current->qnext;
 		}
 	}
 
 
-	// current = &queuetab[pid];
+	// Remove a node from the queue
 	next = current->qnext;	
 	prev = current->qprev;	
-	// queuetab[prev->pid].qnext = next;
-	// queuetab[next->pid].qprev = prev;
+	
 	prev->qnext = next;
 	next->qprev = prev;
-
+	// Free its memory
 	freemem(current,sizeof(struct qentry));
 
 	return pid;

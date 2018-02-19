@@ -38,7 +38,7 @@ status	unsleep(
 
 	current = &queuetab[sleepq];
 
-	while(current!=NULL && current->pid != pid)
+	while(current!=NULL && current->pid != pid) 	// Look for node in queue
 	{
 		current = current->qnext;
 	}
@@ -46,10 +46,6 @@ status	unsleep(
 
 
 	pidnext = current->qnext;
-
-	// if (pidnext < NPROC) {
-	// 	queuetab[pidnext].qkey += queuetab[pid].qkey;
-	// }
 
 	if(pidnext->pid < NPROC)
 	{
