@@ -24,7 +24,7 @@ void	resched2(uint32 state)		/* Assumes interrupts are disabled	*/
 
 	ptold = &proctab[currpid];
 	ptold->prstate = state;		//Assign given state to ptold
-	if (ptold->prstate == PR_CURR || state == PR_READY) {  /* Process remains eligible */
+	if (ptold->prstate == PR_CURR ) {  /* Process remains eligible */
 		if (ptold->prprio > firstkey(readylist)) {
 			return;
 		}
