@@ -8,7 +8,7 @@ struct	defer	Defer;
  *  resched  -  Reschedule processor to highest priority eligible process
  *------------------------------------------------------------------------
  */
-void	resched2(uint32 state)		/* Assumes interrupts are disabled	*/
+void	resched2(uint32 next_state)		/* Assumes interrupts are disabled	*/
 {
 	struct procent *ptold;	/* Ptr to table entry for old process	*/
 	struct procent *ptnew;	/* Ptr to table entry for new process	*/
@@ -23,8 +23,24 @@ void	resched2(uint32 state)		/* Assumes interrupts are disabled	*/
 	/* Point to process table entry for the current (old) process */
 
 	ptold = &proctab[currpid];
-	ptold->prstate = state;		//Assign given state to ptold
-	if (ptold->prstate == PR_CURR ) {  /* Process remains eligible */
+	// ptold->prstate = next_state;		//Assign given state to ptold
+
+	if(next_state<0 && next_state>7)
+	{
+		return SYSERR;
+	}
+
+	if(next_state==1)
+	{
+		ptold->prstate = PR_CURR;
+	}
+
+	if(next_state==2)
+	{
+		ptold->prstate = PR_READY;
+	}
+
+	if (ptold->prstate == PR_CURR || ptold->prstate == PR_READY ) {  /* Process remains eligible */
 		if (ptold->prprio > firstkey(readylist)) {
 			return;
 		}
