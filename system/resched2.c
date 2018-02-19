@@ -25,7 +25,7 @@ void	resched2(uint32 next_state)		/* Assumes interrupts are disabled	*/
 	ptold = &proctab[currpid];
 	// ptold->prstate = next_state;		//Assign given state to ptold
 
-	if(next_state<0 && next_state>7)
+	if(next_state<0 || next_state>7)
 	{
 		return SYSERR;
 	}
