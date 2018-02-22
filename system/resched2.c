@@ -27,7 +27,7 @@ void	resched2(uint32 next_state)		/* Assumes interrupts are disabled	*/
 
 	if(next_state<0 || next_state>7)
 	{
-		return SYSERR;
+		return;
 	}
 
 	if(next_state==1)
