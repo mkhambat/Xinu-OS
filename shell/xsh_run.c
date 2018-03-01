@@ -24,14 +24,6 @@ uint32 future_test(int nargs, char *args[])
 //   return OK;
 // #endif
 
-  // if (nargs == 2 && strncmp(args[1], "-r", 2) == 0) {
-  //   ring = 1;
-  //   printf("Producer/consumer process ring\n");
-  // }
-  // else {
-  //   printf("No valid options\n");
-  //   return(OK);
-  // }
 
   if (nargs == 3 && strncmp(args[2], "-r", 2) == 0 && strcmp(args[1], "future_test")==0) {
     ring = 1;
@@ -41,11 +33,6 @@ uint32 future_test(int nargs, char *args[])
     printf("No valid options\n");
     return(OK);
   }  
-
-
-
-
-
 
   if (ring == 1) {
     future *first, *in, *out = NULL;

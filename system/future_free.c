@@ -1,11 +1,11 @@
 #include<xinu.h>
 #include<future.h>
 
-syscall future_free(future *f)
+syscall future_free(future *f)		//Free memory of a future
 {
 	intmask interrupt;
-	interrupt = disable();
-	freemem(f, sizeof(struct futent));
-	restore(interrupt);
+	interrupt = disable();		//Disable all interrupts
+	freemem(f, sizeof(struct futent));		//Free memory
+	restore(interrupt);			//Restore all interrupts
 	return OK;
 }
