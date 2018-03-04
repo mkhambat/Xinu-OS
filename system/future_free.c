@@ -3,9 +3,15 @@
 
 syscall future_free(future *f)		//Free memory of a future
 {
-	intmask interrupt;
-	interrupt = disable();		//Disable all interrupts
+	// intmask interrupt;
+	// interrupt = disable();		//Disable all interrupts
+
+	// freemem(f->)
 	freemem(f, sizeof(struct futent));		//Free memory
-	restore(interrupt);			//Restore all interrupts
+	freemem(f->pid, sizeof(f->pid));
+	freemem(f->state, sizeof(f->state));
+	freemem(f->value, sizeof(f->value));
+	freemem(f->flag, sizeof(f->flag));
+	// restore(interrupt);			//Restore all interrupts
 	return OK;
 }
