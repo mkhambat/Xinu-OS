@@ -84,11 +84,11 @@ uint32 future_test(int nargs, char *args[])
       char name = "ffib"+i;
       resume(create(ffib, 1024, 20, name, 1, i));
     }
-    printf("before future_get %d\n", result);
+    // printf("before future_get %d\n", result);
     future_get(fibfut[n], &result);
-    printf("after future_get result: %d\n", result);
+    // printf("after future_get result: %d\n", result);
 
-    printf("%d\n",&result );
+    // printf("%d\n",&result );
     printf("Futures Fibonacci for N=%d\n",n);
     printf("Nth Fibonacci value for N=%d is %d\n", n,result);
     return OK;
