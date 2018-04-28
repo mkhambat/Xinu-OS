@@ -101,6 +101,8 @@ syscall future_get(future *f, int *value)		//Get a value of the future and store
 			// DEQUEUE
 			f->set_queue.qnext = current->qnext;
 			resume(current->qpid);
+			freemem(current, sizeof(struct qent));		//Free memory
+
 			
 			return OK;
 		}

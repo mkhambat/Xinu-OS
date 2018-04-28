@@ -17,6 +17,7 @@ syscall future_set(future *f, int *value)		//Set the value to future
 			f->state = FUTURE_VALID;
 			// interrupt = disable();
 			ready(f->pid);		//Put the process back in the ready queue
+
 			// restore(interrupt);
 			return OK;
 		}
@@ -42,6 +43,9 @@ syscall future_set(future *f, int *value)		//Set the value to future
 			{	
 			 	ready(current->qpid);
 				current = current->qnext;
+				freemem(current, sizeof(struct qent));		//Free memory
+
+
 				f->state = FUTURE_VALID;
 			}
 		}
@@ -66,6 +70,7 @@ syscall future_set(future *f, int *value)		//Set the value to future
 
 			f->get_queue.qnext = current->qnext;		
 			resume(current->qpid);
+			freemem(current, sizeof(struct qent));		//Free memory
 			
 			return OK;
 		}

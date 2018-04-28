@@ -82,5 +82,7 @@ extern shellcmd xsh_process_ring	(int32, char *[]);
 /* in file xsh_future_ring.c */
 extern shellcmd xsh_run	(int32, char *[]);
 
+extern shellcmd xsh_fstest (int32, char *[]);
+
 /* in file xsh_mmu.c */
 extern  shellcmd xsh_mmu	(int32, char *[]);
